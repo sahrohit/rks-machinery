@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Button, Input } from "@nextui-org/react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { type SVGProps } from "react";
 import { Container } from "~/components/layout/Container";
@@ -49,14 +50,15 @@ function ArrowIcon(props: SVGProps<SVGSVGElement>) {
 }
 
 function NewsletterForm() {
+  const t = useTranslations("Footer");
+
   return (
     <form className="max-w-sm">
       <h2 className="font-display text-sm font-semibold tracking-wider text-neutral-950">
-        Sign up for our newsletter
+        {t("newsletter-heading")}
       </h2>
       <p className="mt-4 text-sm text-neutral-700">
-        Subscribe to get the latest design news, articles, resources and
-        inspiration.
+        {t("newsletter-subheading")}
       </p>
       <div className="relative mt-6">
         <Input variant="bordered" type="email" label="Email" />

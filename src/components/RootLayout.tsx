@@ -13,6 +13,7 @@ import {
   type ReactNode,
 } from "react";
 import Link from "next/link";
+import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import { motion, MotionConfig, useReducedMotion } from "framer-motion";
@@ -26,6 +27,7 @@ import { Offices } from "~/components/Offices";
 import { SocialMedia } from "~/components/SocialMedia";
 import LocaleSwitcher from "~/components/ui/LocaleSwitcher";
 import { Button } from "@nextui-org/react";
+import { useTranslations } from "next-intl";
 
 interface RootLayoutProps {
   logoHovered: boolean | null;
@@ -45,6 +47,7 @@ function Header({
   onToggle,
   toggleRef,
 }: any) {
+  const t = useTranslations("Navbar");
   const { logoHovered, setLogoHovered } = useContext(RootLayoutContext);
 
   return (
@@ -68,11 +71,12 @@ function Header({
           />
         </Link>
         <div className="flex items-center gap-x-8">
-          {/* <Button href="/contact" invert={invert}>
-            Contact us
-          </Button> */}
-          <Button className="bg-neutral-950 text-white hover:bg-neutral-800">
-            Contact Us
+          <Button
+            href="/test"
+            as={NextLink}
+            className="bg-neutral-950 text-white hover:bg-neutral-800"
+          >
+            {t("contact-us")}
           </Button>
           <LocaleSwitcher />
           <button
@@ -130,15 +134,17 @@ function NavigationItem({ href, children }: NavigationItemProps) {
 }
 
 function Navigation() {
+  const t = useTranslations("Navbar");
+
   return (
     <nav className="mt-px font-display text-5xl font-medium tracking-tight text-white">
       <NavigationRow>
-        <NavigationItem href="/work">Our Work</NavigationItem>
-        <NavigationItem href="/about">About Us</NavigationItem>
+        <NavigationItem href="/work">{t("our-work")}</NavigationItem>
+        <NavigationItem href="/about">{t("about-us")}</NavigationItem>
       </NavigationRow>
       <NavigationRow>
-        <NavigationItem href="/process">Our Process</NavigationItem>
-        <NavigationItem href="/blog">Blog</NavigationItem>
+        <NavigationItem href="/process">{t("our-process")}</NavigationItem>
+        <NavigationItem href="/blog">{t("blog")}</NavigationItem>
       </NavigationRow>
     </nav>
   );
@@ -151,6 +157,8 @@ function RootLayoutInner({ children }: { children: ReactNode }) {
   const closeRef = useRef<any>();
   const navRef = useRef<any>();
   const shouldReduceMotion = useReducedMotion();
+
+  const t = useTranslations("Navbar");
 
   useEffect(() => {
     function onClick(event: any) {
@@ -218,7 +226,7 @@ function RootLayoutInner({ children }: { children: ReactNode }) {
                 <div className="grid grid-cols-1 gap-y-10 pb-16 pt-10 sm:grid-cols-2 sm:pt-16">
                   <div>
                     <h2 className="font-display text-base font-semibold text-white">
-                      Our offices
+                      {t("our-offices")}
                     </h2>
                     <Offices
                       invert
@@ -227,7 +235,7 @@ function RootLayoutInner({ children }: { children: ReactNode }) {
                   </div>
                   <div className="sm:border-l sm:border-transparent sm:pl-16">
                     <h2 className="font-display text-base font-semibold text-white">
-                      Follow us
+                      {t("follow-us")}
                     </h2>
                     <SocialMedia className="mt-6" invert />
                   </div>

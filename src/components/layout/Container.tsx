@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-interface ContainerProps {
+export interface ContainerProps {
   as?: React.ElementType;
   className?: string;
   children?: React.ReactNode;

@@ -1,6 +1,6 @@
 const title = 'RKSM | Rajesh Sah Machinery';
 const description =
-    'One stop solution for all your machinery needs.';
+    'We deal with Engineering Laboratory Equipment. Installation Demonstration And Training.';
 const url = 'https://rksm.netlify.app';
 
 const SEO = {

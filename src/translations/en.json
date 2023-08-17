@@ -1,4 +1,13 @@
 {
+  "Navbar": {
+    "our-work": "Our Work",
+    "blog": "Blog",
+    "our-process": "Our Process",
+    "about-us": "About Us",
+    "our-offices": "Our offices",
+    "follow-us": "Follow Us",
+    "contact-us": "Contact Us"
+  },
   "Home": {
     "title": "RKS Machinery Pvt Ltd.",
     "landing-heading": "Laboratory Equipment solution based in Nepal.",
@@ -16,5 +25,33 @@
       "address-line-1": "Janakpurdham-1",
       "address-line-2": "45600, Dhanusha, Nepal"
     }
+  },
+  "Testimonial": {
+    "content": "The team at RKSM went above and beyond with our onboarding, even helping us setting up the Laboratory machines as well as gave training on how to use and maintain them."
+  },
+  "Services": {
+    "title": "Services",
+    "heading": "We help you identify, explore and respond to new opportunities.",
+    "sub-heading": "As long as those opportunities involve giving us money to re-purpose old projects — we can come up with an endless number of those.",
+    "service-1": {
+      "heading": "Laboratory Equipment",
+      "content": "We provide all kinds of laboratory equipment and machines for schools, colleges, universities and other research centers."
+    },
+    "service-2": {
+      "heading": "Laboratory Chemicals",
+      "content": "We provide all kinds of laboratory chemicals for schools, colleges, universities and other research centers."
+    },
+    "service-3": {
+      "heading": "Laboratory Glassware",
+      "content": "We provide all kinds of laboratory glassware for schools, colleges, universities and other research centers."
+    },
+    "service-4": {
+      "heading": "Laboratory Consumables",
+      "content": "We provide all kinds of laboratory consumables for schools, colleges, universities and other research centers."
+    }
+  },
+  "Footer": {
+    "newsletter-heading": "Sign up for our newsletter",
+    "newsletter-subheading": "Subscribe to get update about the latest equipments and learn about it."
   }
 }

@@ -17,7 +17,7 @@ import { Work_Sans } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 
 const workSans = Work_Sans({
-  subsets: ["latin"], 
+  subsets: ["latin"],
   display: "swap",
   variable: "--font-work-sans",
 });
