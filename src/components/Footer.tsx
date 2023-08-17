@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Button, Input } from "@nextui-org/react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -19,7 +18,7 @@ function Navigation() {
             </div>
             <ul role="list" className="mt-4 text-sm text-neutral-700">
               {section.links.map((link) => (
-                <li key={link.title as string} className="mt-4">
+                <li key={link.title} className="mt-4">
                   <Link
                     href={link.href}
                     className="transition hover:text-neutral-950"
