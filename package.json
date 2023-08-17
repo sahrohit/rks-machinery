@@ -20,6 +20,7 @@
     "@trpc/next": "^10.34.0",
     "@trpc/react-query": "^10.34.0",
     "@trpc/server": "^10.34.0",
+    "clsx": "^2.0.0",
     "framer-motion": "^10.15.1",
     "next": "^13.4.2",
     "next-auth": "^4.22.4",
