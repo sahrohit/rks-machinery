@@ -80,6 +80,9 @@ dependencies:
   react-hook-form:
     specifier: ^7.45.4
     version: 7.45.4(react@18.2.0)
+  react-hook-form-persist:
+    specifier: ^3.0.0
+    version: 3.0.0(react-hook-form@7.45.4)(react@18.2.0)
   react-hot-toast:
     specifier: ^2.4.1
     version: 2.4.1(csstype@3.1.2)(react-dom@18.2.0)(react@18.2.0)
@@ -4743,6 +4746,16 @@ packages:
       file-selector: 0.6.0
       prop-types: 15.8.1
       react: 18.2.0
+    dev: false
+
+  /react-hook-form-persist@3.0.0(react-hook-form@7.45.4)(react@18.2.0):
+    resolution: {integrity: sha512-6nwW65JyFpBem9RjLYAWvIFxOLoCk0E13iB9e5yeF5jeHlwx1ua0M77FvwhPpD8eaCz7hG4ziCdOxRcnJVUSxQ==}
+    peerDependencies:
+      react: '>= 16.3'
+      react-hook-form: '>= 6'
+    dependencies:
+      react: 18.2.0
+      react-hook-form: 7.45.4(react@18.2.0)
     dev: false
 
   /react-hook-form@7.45.4(react@18.2.0):

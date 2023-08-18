@@ -1,22 +1,30 @@
+import { type UseFieldArrayAppend } from "react-hook-form";
+import { toast } from "react-hot-toast";
+import { type IProduct } from "~/pages/admin/products";
 import { UploadDropzone } from "~/utils/uploadthing";
 
+interface FileUploaderProps {
+  append: UseFieldArrayAppend<IProduct, "images">;
+}
 
-const FileUploader = () => {
+const FileUploader = ({ append }: FileUploaderProps) => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="w-full">
       <UploadDropzone
         appearance={{
           container: {},
         }}
         endpoint="imageUploader"
         onClientUploadComplete={(res) => {
-          // Do something with the response
-          console.log("Files: ", res);
-          alert("Upload Completed");
+          res?.forEach((file) => {
+            append({
+              url: file.url,
+            });
+          });
+          toast.success(`Files upload successfully`);
         }}
         onUploadError={(error: Error) => {
-          // Do something with the error.
-          alert(`ERROR! ${error.message}`);
+          toast.error(`ERROR! ${error.message}`);
         }}
       />
     </main>

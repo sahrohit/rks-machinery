@@ -10,6 +10,7 @@ import { SessionProvider } from "next-auth/react";
 import type { AppProps, AppType } from "next/app";
 import { NextUIProvider } from "@nextui-org/react";
 import { api } from "~/utils/api";
+import "@uploadthing/react/styles.css";
 import "~/styles/globals.css";
 import Script from "next/script";
 import { RootLayout } from "~/components/RootLayout";

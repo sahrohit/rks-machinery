@@ -1,5 +1,7 @@
-const ProductsPage = () => {
-  return <h1>Hello World</h1>;
+import React from "react";
+
+const AdminHome = () => {
+  return <div>AdminHome</div>;
 };
 
-export default ProductsPage;
+export default AdminHome;
