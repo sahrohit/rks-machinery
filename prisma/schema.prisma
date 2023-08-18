@@ -83,12 +83,14 @@ model Admin {
 }
 
 model Category {
-    id         String    @id @default(cuid())
-    name       String?   @unique
-    slug       String?   @unique
-    createdAt  DateTime  @default(now())
-    updatedAt  DateTime  @updatedAt
-    categoryId Product[]
+    id        String    @id @default(cuid())
+    name      String    @unique
+    desc      String?
+    slug      String    @unique
+    image     String?
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    products  Product[]
 }
 
 model Product {

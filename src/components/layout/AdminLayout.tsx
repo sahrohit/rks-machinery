@@ -13,10 +13,11 @@ import {
 import clsx from "clsx";
 import { Logo } from "../Logo";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import PageLoader from "../shared/PageLoader";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { Button } from "@nextui-org/react";
 
 const navigation = [
   { name: "Products", href: "/admin/products", icon: AiOutlineHome },
@@ -115,7 +116,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                           key={item.name}
                           href={item.href}
                           className={clsx(
-                            router.pathname === item.href
+                            router.pathname.includes(item.href)
                               ? "bg-gray-100 text-gray-900"
                               : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
                             "group flex items-center rounded-md px-2 py-2 text-base font-medium"
@@ -123,7 +124,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                         >
                           <item.icon
                             className={clsx(
-                              router.pathname === item.href
+                              router.pathname.includes(item.href)
                                 ? "text-gray-500"
                                 : "text-gray-400 group-hover:text-gray-500",
                               "mr-4 h-6 w-6 flex-shrink-0"
@@ -167,7 +168,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                     key={item.name}
                     href={item.href}
                     className={clsx(
-                      router.pathname === item.href
+                      router.pathname.includes(item.href)
                         ? "bg-gray-100 text-gray-900"
                         : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
                       "group flex items-center rounded-md px-2 py-2 text-sm font-medium"
@@ -175,7 +176,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                   >
                     <item.icon
                       className={clsx(
-                        router.pathname === item.href
+                        router.pathname.includes(item.href)
                           ? "text-gray-500"
                           : "text-gray-400 group-hover:text-gray-500",
                         "mr-3 h-6 w-6 flex-shrink-0"
@@ -217,8 +218,10 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
 export default AdminLayout;
 
 const UserProfile = ({ name, image }: { name: string; image: string }) => {
+  const router = useRouter();
+
   return (
-    <div className="flex flex-shrink-0 border-t border-gray-200 p-4">
+    <div className="flex flex-shrink-0 flex-col border-t border-gray-200 p-4">
       <a href="#" className="group block w-full flex-shrink-0">
         <div className="flex items-center">
           <div>
@@ -240,6 +243,18 @@ const UserProfile = ({ name, image }: { name: string; image: string }) => {
           </div>
         </div>
       </a>
+      <Button
+        color="danger"
+        className="my-4"
+        onClick={() => {
+          router
+            .push("/")
+            .then(() => void signOut())
+            .catch((err) => console.log(err));
+        }}
+      >
+        Logout
+      </Button>
     </div>
   );
 };

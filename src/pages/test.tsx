@@ -1,8 +1,7 @@
-import React from "react";
-import PageLoader from "~/components/shared/PageLoader";
+import FileUploader from "~/components/ui/FileUploader";
 
 const TestPage = () => {
-  return <PageLoader />;
+  return <FileUploader />;
 };
 
 export default TestPage;

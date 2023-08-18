@@ -22,6 +22,7 @@
     "@trpc/next": "^10.34.0",
     "@trpc/react-query": "^10.34.0",
     "@trpc/server": "^10.34.0",
+    "@uploadthing/react": "^5.3.0",
     "clsx": "^2.0.0",
     "framer-motion": "^10.15.1",
     "next": "^13.4.2",
@@ -33,11 +34,13 @@
     "nprogress": "^0.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.45.4",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.10.1",
     "sharp": "^0.32.5",
     "superjson": "^1.13.1",
+    "uploadthing": "^5.3.3",
     "zod": "^3.21.4"
   },
   "devDependencies": {

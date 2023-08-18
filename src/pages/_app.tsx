@@ -17,6 +17,7 @@ import { Work_Sans } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { Toaster } from "react-hot-toast";
 import AdminLayout from "~/components/layout/AdminLayout";
+// import "@uploadthing/react/styles.css";
 
 const workSans = Work_Sans({
   subsets: ["latin"],
