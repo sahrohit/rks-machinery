@@ -1,11 +1,17 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { Button, Input } from "@nextui-org/react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { type SVGProps } from "react";
+import { z } from "zod";
 import { Container } from "~/components/layout/Container";
 import { FadeIn } from "~/components/layout/FadeIn";
 import { Logo } from "~/components/Logo";
 import FOOTER from "~/config/footer";
+import { api } from "~/utils/api";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
 
 function Navigation() {
   return (
@@ -48,11 +54,39 @@ function ArrowIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+type NewsLetterFormValues = {
+  email: string;
+};
+
+const NewsLetterValidationSchema = z.object({
+  email: z.string().email(),
+});
+
 function NewsletterForm() {
   const t = useTranslations("Footer");
+  const { mutate } = api.newsletter.signUp.useMutation({
+    onSuccess: () => {
+      toast.success("You`ll hear from us very soon!");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const { register, handleSubmit } = useForm<NewsLetterFormValues>({
+    defaultValues: {
+      email: "",
+    },
+    resolver: zodResolver(NewsLetterValidationSchema),
+  });
 
   return (
-    <form className="max-w-sm">
+    <form
+      className="max-w-sm"
+      onSubmit={handleSubmit((data) => {
+        mutate(data);
+      })}
+    >
       <h2 className="font-display text-sm font-semibold tracking-wider text-neutral-950">
         {t("newsletter-heading")}
       </h2>
@@ -60,9 +94,15 @@ function NewsletterForm() {
         {t("newsletter-subheading")}
       </p>
       <div className="relative mt-6">
-        <Input variant="bordered" type="email" label="Email" />
+        <Input
+          {...register("email")}
+          variant="bordered"
+          type="email"
+          label="Email"
+        />
         <div className="absolute inset-y-1 right-1 flex justify-end">
           <Button
+            type="submit"
             className="aspect-square h-full w-full rounded-xl bg-neutral-950 text-white transition hover:bg-neutral-800"
             isIconOnly
             aria-label="Like"

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import * as gtag from "~/utils/gtag";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import NProgress from "nprogress";
 import SEO from "next-seo.config";
 import { DefaultSeo } from "next-seo";
@@ -15,6 +15,8 @@ import Script from "next/script";
 import { RootLayout } from "~/components/RootLayout";
 import { Work_Sans } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
+import { Toaster } from "react-hot-toast";
+import AdminLayout from "~/components/layout/AdminLayout";
 
 const workSans = Work_Sans({
   subsets: ["latin"],
@@ -30,6 +32,8 @@ const MyApp: AppType<{ session: Session | null; messages: any }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps<{ session: Session | null; messages: any }>) => {
+  const router = useRouter();
+
   return (
     <NextIntlClientProvider messages={pageProps.messages}>
       <NextUIProvider>
@@ -53,14 +57,21 @@ const MyApp: AppType<{ session: Session | null; messages: any }> = ({
         />
         <SessionProvider session={session}>
           <DefaultSeo {...SEO} />
+          <Toaster />
           <style jsx global>{`
             :root {
               --font-work-sans: ${workSans.style.fontFamily};
             }
           `}</style>
-          <RootLayout>
-            <Component {...pageProps} />
-          </RootLayout>
+          {router.asPath.includes("admin") ? (
+            <AdminLayout>
+              <Component {...pageProps} />
+            </AdminLayout>
+          ) : (
+            <RootLayout>
+              <Component {...pageProps} />
+            </RootLayout>
+          )}
         </SessionProvider>
       </NextUIProvider>
     </NextIntlClientProvider>

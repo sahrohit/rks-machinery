@@ -21,7 +21,7 @@ export function SectionIntro({
 }: SectionIntroProps) {
   return (
     <Container {...props}>
-      <FadeIn className="max-w-2xl">
+      <FadeIn className="w-full">
         <h2>
           {eyebrow && (
             <>

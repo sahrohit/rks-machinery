@@ -1,7 +1,5 @@
-import React from "react";
-
-const AdminPage = () => {
-  return <div>You found something.</div>;
+const ProductsPage = () => {
+  return <h1>Hello World</h1>;
 };
 
-export default AdminPage;
+export default ProductsPage;

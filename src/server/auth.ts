@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { type GetServerSidePropsContext } from "next";
 import {
@@ -37,6 +40,18 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
+    async signIn({ user }) {
+      const isAllowedToSignIn = await prisma.admin.findUnique({
+        where: {
+          email: user.email ?? "",
+        },
+      });
+      if (isAllowedToSignIn?.access) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     session: ({ session, user }) => ({
       ...session,
       user: {

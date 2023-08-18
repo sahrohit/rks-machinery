@@ -15,6 +15,9 @@ const config = {
     locales: ["en", "np"],
     defaultLocale: "en",
   },
+  images: {
+    domains: ["lh3.googleusercontent.com"]
+  }
 };
 
 

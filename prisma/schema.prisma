@@ -11,12 +11,6 @@ datasource db {
     directUrl = env("DIRECT_URL")
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -45,13 +39,24 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String        @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?       @unique
     emailVerified DateTime?
     image         String?
     accounts      Account[]
     sessions      Session[]
+    ActivityLog   ActivityLog[]
+}
+
+model ActivityLog {
+    id        String   @id @default(cuid())
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    type      String
+    desc      String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model VerificationToken {
@@ -60,4 +65,62 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Newsletter {
+    id        String   @id @default(cuid())
+    email     String?  @unique
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Admin {
+    id        String   @id @default(cuid())
+    email     String?  @unique
+    access    Boolean?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt()
+}
+
+model Category {
+    id         String    @id @default(cuid())
+    name       String?   @unique
+    slug       String?   @unique
+    createdAt  DateTime  @default(now())
+    updatedAt  DateTime  @updatedAt
+    categoryId Product[]
+}
+
+model Product {
+    id         String           @id @default(cuid())
+    name       String?          @unique
+    slug       String?          @unique
+    price      Float?
+    desc       String?
+    images     ProductImage[]
+    features   ProductFeature[]
+    categoryId String?
+    category   Category?        @relation(fields: [categoryId], references: [id])
+    keywords   String?
+    createdAt  DateTime         @default(now())
+    updatedAt  DateTime         @updatedAt
+}
+
+model ProductImage {
+    id        String   @id @default(cuid())
+    url       String?
+    product   Product? @relation(fields: [productId], references: [id])
+    productId String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model ProductFeature {
+    id          String   @id @default(cuid())
+    title       String?
+    description String?
+    product     Product? @relation(fields: [productId], references: [id])
+    productId   String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 }
