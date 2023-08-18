@@ -2,13 +2,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { type Admin } from "@prisma/client";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const adminRouter = createTRPCRouter({
   getAdmins: protectedProcedure.query(async ({ ctx }) => {
-    const admins: Admin[] = (await ctx.prisma.admin.findMany()) as Admin[];
+    const admins = await ctx.prisma.admin.findMany();
     return admins;
   }),
 
