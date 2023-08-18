@@ -6,29 +6,28 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-    User,
-    Chip, Table,
-    TableHeader,
-    TableColumn,
-    TableBody,
-    TableRow,
-    TableCell,
-    Button,
-    Input,
-    Modal,
-    ModalBody,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    useDisclosure
+  User,
+  Chip,
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+  Button,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+  Skeleton,
 } from "@nextui-org/react";
 import React from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import {
-    AiOutlineDelete,
-    AiOutlineEdit, AiOutlineMail
-} from "react-icons/ai";
+import { AiOutlineDelete, AiOutlineEdit, AiOutlineMail } from "react-icons/ai";
 import { z } from "zod";
 import { SectionIntro } from "~/components/shared/SectionIntro";
 import ConfirmationModal from "~/components/ui/ConfirmationModal";
@@ -109,7 +108,7 @@ const TeamTable = () => {
               size="sm"
               variant="flat"
             >
-              {cellValue ? "ADMIN ACCESS" : "REVOKED"}
+              {cellValue ? "ADMIN" : "REVOKED"}
             </Chip>
           );
         case "actions":
@@ -187,7 +186,28 @@ const TeamTable = () => {
 };
 
 const TeamTableSkeleton = () => {
-  return <div>Team Table Skeleton</div>;
+  return (
+    <Table aria-label="Example table with custom cells">
+      <TableHeader>
+        <TableColumn align="start">Email</TableColumn>
+        <TableColumn align="start">ACCESS</TableColumn>
+        <TableColumn align="center">ACTIONS</TableColumn>
+      </TableHeader>
+      <TableBody>
+        {[1, 2, 3].map((row) => (
+          <TableRow key={`mock-cell-${row}`}>
+            {[1, 2, 3].map((col) => (
+              <TableCell key={`mock-cell-${col}`}>
+                <Skeleton className="w-3/5 rounded-lg">
+                  <div className="h-10 w-3/5 rounded-lg bg-default-200"></div>
+                </Skeleton>
+              </TableCell>
+            ))}
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
 };
 
 const AddNewTeam = () => {
