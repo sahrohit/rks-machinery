@@ -47,7 +47,7 @@ const TeamPage = () => {
         title="Manage Team"
         className="mt-4 sm:mt-6 lg:mt-8"
       >
-        <div className="flex w-full flex-row justify-between">
+        <div className="flex w-full flex-col justify-between md:flex-row">
           <p>You can add admin, and also revoke their permissions here.</p>
           <AddNewTeam />
         </div>

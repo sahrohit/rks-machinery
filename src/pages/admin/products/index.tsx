@@ -12,7 +12,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
 import { z } from "zod";
 import { SectionIntro } from "~/components/shared/SectionIntro";
 import { TbCurrencyRupeeNepalese } from "react-icons/tb";
@@ -30,7 +30,7 @@ const ProductsPage = () => {
       title="Products"
       className="mt-4 sm:mt-6 lg:mt-8"
     >
-      <div className="flex w-full flex-row justify-between">
+      <div className="flex w-full flex-col justify-between md:flex-row">
         <p>This is the control panel for all you product management.</p>
         <AddNewProduct />
       </div>
@@ -95,7 +95,16 @@ const AddNewProduct = () => {
       desc: "",
       price: "",
       categoryId: "",
-      features: [],
+      features: [
+        {
+          title: "",
+          description: "",
+        },
+        {
+          title: "",
+          description: "",
+        },
+      ],
       images: [],
     },
     resolver: zodResolver(ProductSchema),
@@ -114,11 +123,12 @@ const AddNewProduct = () => {
     fields: imagesFields,
     append: imagesAppend,
     remove: imagesRemove,
-    insert: imagesInsert,
   } = useFieldArray({
     control,
     name: "images",
   });
+
+  console.log(errors);
 
   useFormPersist("create-product", { watch, setValue });
 
@@ -146,6 +156,7 @@ const AddNewProduct = () => {
                 Add Product
               </ModalHeader>
               <ModalBody>
+                <h2 className="text-2xl">Product Description</h2>
                 <div className="flex w-full flex-col justify-between gap-4 md:flex-row">
                   <Input
                     {...register("name")}
@@ -165,6 +176,7 @@ const AddNewProduct = () => {
                   <Input
                     isReadOnly
                     isDisabled
+                    value={watch("name").replace(/\s/g, "-").toLowerCase()}
                     {...register("slug")}
                     placeholder="Product Slug"
                     label="Product Slug"
@@ -210,13 +222,14 @@ const AddNewProduct = () => {
                   errorMessage={errors.desc?.message}
                   color={errors.desc ? "danger" : "default"}
                 />
+                <h2 className="text-2xl">Feature of the Product</h2>
                 {featuresFields.map((field, index) => (
                   <div
                     key={`feature-array-${index + 1}`}
                     className="flex w-full flex-col justify-between gap-4 md:flex-row"
                   >
                     <Input
-                      key={field.id}
+                      key={`title-${field.id}`}
                       {...register(`features.${index}.title`)}
                       label={`Title ${index + 1}`}
                       description={`Feature Title ${index + 1}`}
@@ -225,7 +238,7 @@ const AddNewProduct = () => {
                       variant="bordered"
                     />
                     <Input
-                      key={field.id}
+                      key={`description-${field.id}`}
                       {...register(`features.${index}.description`)}
                       label={`Description ${index + 1}`}
                       description={`Feature Description ${index + 1}`}
@@ -235,15 +248,17 @@ const AddNewProduct = () => {
                       color={errors.features?.[index] ? "danger" : "default"}
                       variant="bordered"
                     />
-                    <Button
-                      isIconOnly
-                      size="lg"
-                      color="danger"
-                      type="button"
-                      onClick={() => featureRemove(index)}
-                    >
-                      <AiOutlineClose />
-                    </Button>
+                    {index !== 0 && index !== 1 ? (
+                      <Button
+                        isIconOnly
+                        size="lg"
+                        color="danger"
+                        type="button"
+                        onClick={() => featureRemove(index)}
+                      >
+                        <AiOutlineClose />
+                      </Button>
+                    ) : null}
                   </div>
                 ))}
                 <div>
@@ -251,29 +266,42 @@ const AddNewProduct = () => {
                     color="success"
                     type="button"
                     onClick={() =>
-                      featuresAppend({ title: "bill", description: "luo" })
+                      featuresAppend({ title: "", description: "" })
                     }
                   >
                     Add New Feature
                   </Button>
                 </div>
-                {imagesFields.map((field) => (
-                  <Image
-                    key={field.url}
-                    src={field.url}
-                    width={100}
-                    height={100}
-                    alt="Uploaded Image"
-                  />
-                  // <p key={field.url}>{field.url}</p>
-                ))}
+                <h2 className="text-2xl">Images of the product</h2>
+                <div className="flex w-full flex-row flex-wrap gap-4">
+                  {imagesFields.map((field, index) => (
+                    <div key={field.url}>
+                      <Image
+                        src={field.url}
+                        width={112}
+                        height={112}
+                        alt="Uploaded Image"
+                        className="h-32 w-28 overflow-hidden"
+                      />
+                      <Button
+                        variant="light"
+                        color="danger"
+                        className="mt-1 w-full"
+                        isIconOnly
+                        onClick={() => imagesRemove(index)}
+                      >
+                        <AiOutlineDelete />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
                 <FileUploader append={imagesAppend} />
               </ModalBody>
-              <ModalFooter>
+              <ModalFooter className="sticky bottom-0 bg-background">
                 <Button color="default" variant="flat" onClick={onClose}>
                   Close
                 </Button>
-                <Button color="warning" type="submit">
+                <Button color="primary" type="submit">
                   Submit
                 </Button>
               </ModalFooter>
