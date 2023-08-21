@@ -43,7 +43,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
   }
 
   if (status === "unauthenticated") {
-    void router.push("api/auth/signin");
+    void router.push("/api/auth/signin");
     return <PageLoader label="User Loading" />;
   }
 

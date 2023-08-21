@@ -1,7 +1,7 @@
 import { type UseFieldArrayAppend } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import { type IProduct } from "~/pages/admin/products";
 import { UploadDropzone } from "~/utils/uploadthing";
+import { type IProduct } from "../admin/ProductForm";
 
 interface FileUploaderProps {
   append: UseFieldArrayAppend<IProduct, "images">;

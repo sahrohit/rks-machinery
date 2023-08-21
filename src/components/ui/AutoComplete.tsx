@@ -5,7 +5,7 @@ import { Fragment, type ReactNode, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { BsChevronExpand } from "react-icons/bs";
 import { AiOutlineCheck } from "react-icons/ai";
-import { type IProduct } from "~/pages/admin/products";
+import { type IProduct } from "~/pages/admin/products/cards";
 import { type UseFormSetValue } from "react-hook-form";
 
 interface AutoCompleteProps {
@@ -17,7 +17,11 @@ interface AutoCompleteProps {
   description?: ReactNode;
 }
 
-const AutoComplete = ({ options, setValue ,description}: AutoCompleteProps) => {
+const AutoComplete = ({
+  options,
+  setValue,
+  description,
+}: AutoCompleteProps) => {
   const [selected, setSelected] = useState(options[0]);
   const [query, setQuery] = useState("");
 
@@ -55,7 +59,7 @@ const AutoComplete = ({ options, setValue ,description}: AutoCompleteProps) => {
           </Combobox.Button>
         </div>
         {description}
-       
+
         <Transition
           as={Fragment}
           leave="transition ease-in duration-100"
