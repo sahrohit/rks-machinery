@@ -16,7 +16,7 @@ const config = {
     defaultLocale: "en",
   },
   images: {
-    domains: ["lh3.googleusercontent.com", "uploadthing.com"]
+    domains: ["lh3.googleusercontent.com", "uploadthing.com", "tailwindui.com"]
   },
   experimental: {
     esmExternals: false,

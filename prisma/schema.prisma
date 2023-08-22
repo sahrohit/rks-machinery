@@ -94,19 +94,20 @@ model Category {
 }
 
 model Product {
-    id          String           @id @default(cuid())
-    name        String?          @unique
-    slug        String?          @unique
-    price       Float?
-    desc        String?
-    images      ProductImage[]
-    features    ProductFeature[]
-    categoryId  String?
-    category    Category?        @relation(fields: [categoryId], references: [id])
-    keywords    String?
-    isPublished Boolean?         @default(false)
-    createdAt   DateTime         @default(now())
-    updatedAt   DateTime         @updatedAt
+    id             String                 @id @default(cuid())
+    name           String?                @unique
+    slug           String?                @unique
+    price          Float?
+    desc           String?
+    images         ProductImage[]
+    features       ProductFeature[]
+    specifications ProductSpecification[]
+    categoryId     String?
+    category       Category?              @relation(fields: [categoryId], references: [id])
+    keywords       String?
+    isPublished    Boolean?               @default(false)
+    createdAt      DateTime               @default(now())
+    updatedAt      DateTime               @updatedAt
 }
 
 model ProductImage {
@@ -119,6 +120,18 @@ model ProductImage {
 }
 
 model ProductFeature {
+    id          String   @id @default(cuid())
+    title       String?
+    description String?
+    product     Product? @relation(fields: [productId], references: [id])
+    productId   String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@unique([title, productId])
+}
+
+model ProductSpecification {
     id          String   @id @default(cuid())
     title       String?
     description String?

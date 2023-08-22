@@ -15,11 +15,16 @@ import {
   TableRow,
   TableCell,
   Skeleton,
+  Tooltip,
+  Button,
 } from "@nextui-org/react";
-import React from "react";
-import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import React, { useEffect } from "react";
+import { AiOutlineDelete, AiOutlinePullRequest } from "react-icons/ai";
 import ConfirmationModal from "~/components/ui/ConfirmationModal";
 import { api } from "~/utils/api";
+import { TbExternalLink } from "react-icons/tb";
+import Link from "next/link";
+import { toast } from "react-hot-toast";
 
 const ProductsPage = () => {
   return (
@@ -55,61 +60,106 @@ const ProductTable = () => {
   const utils = api.useContext();
 
   const { data, isLoading, error } = api.product.getProducts.useQuery();
+  const { mutate: mutatePublish } = api.product.setPublished.useMutation({
+    onSuccess: async () => {
+      await utils.product.getProducts.invalidate();
+      toast.success("Product Status Updated", {
+        id: "update-product-status",
+      });
+    },
+    onError: () => {
+      toast.error("An error occured", {
+        id: "delete-product-status",
+      });
+    },
+  });
+  const { mutate: mutateDelete } = api.product.deleteProduct.useMutation({
+    onSuccess: async () => {
+      await utils.product.getProducts.invalidate();
+      toast.success("Product Deleted Succesfully");
+    },
+    onError: () => {
+      toast.error("An error occured");
+    },
+  });
 
-  const renderCell = React.useCallback((product: any, columnKey: any) => {
-    const cellValue = product[columnKey];
+  const renderCell = React.useCallback(
+    (product: any, columnKey: any) => {
+      const cellValue = product[columnKey];
 
-    switch (columnKey) {
-      case "category":
-        return <p>{cellValue.name}</p>;
+      switch (columnKey) {
+        case "category":
+          return <p>{cellValue.name}</p>;
 
-      case "isPublished":
-        return (
-          <Chip
-            className="capitalize"
-            color={product.isPublished ? "success" : "danger"}
-            size="sm"
-            variant="flat"
-          >
-            {cellValue ? "PUBLISHED" : "DRAFT"}
-          </Chip>
-        );
-      case "actions":
-        return (
-          <div className="relative flex items-center gap-2">
-            <ConfirmationModal
+        case "isPublished":
+          return (
+            <Chip
+              className="capitalize"
+              color={product.isPublished ? "success" : "danger"}
               size="sm"
-              variant="light"
-              className="cursor-pointer text-lg text-default-400 active:opacity-50"
-              header={product.access ? "Revoke Access" : "Grant Access"}
-              body="Are you sure you want to update access for this user?"
-              onConfirm={() => {
-                console.log("confirm");
-              }}
+              variant="flat"
             >
-              <AiOutlineEdit />
-            </ConfirmationModal>
-            <ProductForm product={product} />
-            <ConfirmationModal
-              size="sm"
-              variant="light"
-              className="cursor-pointer text-lg text-danger active:opacity-50"
-              header="Delete User"
-              body="Are you sure you want to delete this user?"
-              onConfirm={() => {
-                console.log("confirm");
-              }}
-            >
-              <AiOutlineDelete />
-            </ConfirmationModal>
-          </div>
-        );
-      case "price":
-        return <p>रू {cellValue}</p>;
-      default:
-        return cellValue;
-    }
-  }, []);
+              {cellValue ? "PUBLISHED" : "DRAFT"}
+            </Chip>
+          );
+        case "actions":
+          return (
+            <div className="relative flex items-center gap-2">
+              <Tooltip color="success" content="Preview">
+                <Link target="_blank" href={`/products/${product.slug}`}>
+                  <Button isIconOnly variant="light">
+                    <TbExternalLink className="text-lg text-default-400" />
+                  </Button>
+                </Link>
+              </Tooltip>
+              <ProductForm product={product} />
+              <ConfirmationModal
+                size="sm"
+                variant="light"
+                isIconOnly
+                className="cursor-pointer text-lg text-default-400 active:opacity-50"
+                header={product.isPublished ? "Un  Publish?" : "Publish"}
+                body="Are you sure you want to update access for this user?"
+                onConfirm={() => {
+                  toast.loading("Updating Product Status", {
+                    id: "update-product-status",
+                  });
+                  mutatePublish({
+                    id: product.id,
+                    isPublished: !product.isPublished,
+                  });
+                }}
+              >
+                <AiOutlinePullRequest />
+              </ConfirmationModal>
+              <ConfirmationModal
+                size="sm"
+                variant="light"
+                isIconOnly
+                className="cursor-pointer text-lg text-danger active:opacity-50"
+                header="Delete Product"
+                body="Are you sure you want to delete this product?"
+                onConfirm={() => {
+                  toast.loading("Deleting Product", {
+                    id: "delete-product-status",
+                  });
+                  mutateDelete({
+                    id: product.id,
+                  });
+                }}
+              >
+                <AiOutlineDelete />
+              </ConfirmationModal>
+            </div>
+          );
+        case "price":
+          return <p>रू {cellValue}</p>;
+        default:
+          return cellValue;
+      }
+    },
+    [mutateDelete, mutatePublish]
+  );
 
   if (isLoading) {
     return <ProductTableSkeleton />;

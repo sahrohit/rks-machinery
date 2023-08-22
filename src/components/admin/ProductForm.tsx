@@ -51,7 +51,7 @@ const ProductSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters long"),
   slug: z.string().min(3, "Slug must be at least 3 characters long"),
   desc: z.string().min(3, "Description must be at least 3 characters long"),
-  price: z.string(),
+  price: z.number(),
   categoryId: z.string(),
   features: z.array(
     z.object({
@@ -102,9 +102,15 @@ const ProductForm = ({ product }: ProductFormProps) => {
     control,
     watch,
   } = useForm<IProduct>({
-    defaultValues: product ? product : emptyProductForm,
+    defaultValues: product
+      ? {
+          ...product,
+          images: product.images.map((image) => ({
+            url: image.url,
+          })),
+        }
+      : emptyProductForm,
     resolver: zodResolver(ProductSchema),
-    shouldUnregister: true,
   });
 
   const {
@@ -114,7 +120,6 @@ const ProductForm = ({ product }: ProductFormProps) => {
   } = useFieldArray({
     control,
     name: "features",
-    shouldUnregister: true,
   });
 
   const {
@@ -124,7 +129,6 @@ const ProductForm = ({ product }: ProductFormProps) => {
   } = useFieldArray({
     control,
     name: "images",
-    shouldUnregister: true,
   });
 
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -133,21 +137,29 @@ const ProductForm = ({ product }: ProductFormProps) => {
 
   const { mutate: mutateCreate } = api.product.addProduct.useMutation({
     onSuccess: () => {
-      toast.success("Product created successfully");
+      toast.success("Product created successfully", {
+        id: "saving-product",
+      });
       onClose();
     },
     onError: (error) => {
-      toast.error(error.message);
+      toast.error(error.message, {
+        id: "saving-product",
+      });
     },
   });
 
   const { mutate: mutateUpdate } = api.product.updateProduct.useMutation({
     onSuccess: () => {
-      toast.success("Product updated successfully");
+      toast.success("Product updated successfully", {
+        id: "saving-product",
+      });
       onClose();
     },
     onError: (error) => {
-      toast.error(error.message);
+      toast.error(error.message, {
+        id: "saving-product",
+      });
     },
   });
 
@@ -171,10 +183,17 @@ const ProductForm = ({ product }: ProductFormProps) => {
           {(onClose) => (
             <form
               onSubmit={handleSubmit((val) => {
+                toast.loading("Saving Product", {
+                  id: "saving-product",
+                });
                 if (!product) {
                   mutateCreate({ ...val, price: val.price.toString() });
                 } else {
-                  mutateUpdate({ ...val, id: product.id });
+                  mutateUpdate({
+                    ...val,
+                    price: val.price.toString(),
+                    id: product.id,
+                  });
                 }
               })}
             >

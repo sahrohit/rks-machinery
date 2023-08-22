@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { type GetStaticPropsContext } from "next";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import React from "react";
 import PageIntro from "~/components/shared/PageIntro";
@@ -70,27 +71,39 @@ const ProductPage = () => {
 
             <div>
               <div className="aspect-w-1 aspect-h-1 overflow-hidden rounded-lg bg-gray-100">
-                <img
-                  src="https://tailwindui.com/img/ecommerce-images/product-feature-09-main-detail.jpg"
-                  alt="Black kettle with long pour spot and angled body on marble counter next to coffee mug and pour-over system."
-                  className="h-full w-full object-cover object-center"
-                />
+                {data.images[0]?.url && (
+                  <Image
+                    src={data.images[0]?.url}
+                    alt="Black kettle with long pour spot and angled body on marble counter next to coffee mug and pour-over system."
+                    width={1024}
+                    height={1024}
+                    className="h-full w-full object-cover object-center"
+                  />
+                )}
               </div>
               <div className="mt-4 grid grid-cols-2 gap-4 sm:mt-6 sm:gap-6 lg:mt-8 lg:gap-8">
-                <div className="aspect-w-1 aspect-h-1 overflow-hidden rounded-lg bg-gray-100">
-                  <img
-                    src="https://tailwindui.com/img/ecommerce-images/product-feature-09-detail-01.jpg"
-                    alt="Detail of temperature setting button on kettle bass with digital degree readout."
-                    className="h-full w-full object-cover object-center"
-                  />
-                </div>
-                <div className="aspect-w-1 aspect-h-1 overflow-hidden rounded-lg bg-gray-100">
-                  <img
-                    src="https://tailwindui.com/img/ecommerce-images/product-feature-09-detail-02.jpg"
-                    alt="Kettle spout pouring boiling water into coffee grounds in pour-over mug."
-                    className="h-full w-full object-cover object-center"
-                  />
-                </div>
+                {data.images[1]?.url && (
+                  <div className="aspect-w-1 aspect-h-1 overflow-hidden rounded-lg bg-gray-100">
+                    <Image
+                      width={1024}
+                      height={1024}
+                      src={data.images[1]?.url}
+                      alt="Detail of temperature setting button on kettle bass with digital degree readout."
+                      className="h-full w-full object-cover object-center"
+                    />
+                  </div>
+                )}
+                {data.images[2]?.url && (
+                  <div className="aspect-w-1 aspect-h-1 overflow-hidden rounded-lg bg-gray-100">
+                    <Image
+                      src={data.images[2]?.url}
+                      width={1024}
+                      height={1024}
+                      alt="Kettle spout pouring boiling water into coffee grounds in pour-over mug."
+                      className="h-full w-full object-cover object-center"
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -98,28 +111,48 @@ const ProductPage = () => {
       </div>
       <div className="bg-white">
         <div className="mx-auto grid max-w-2xl grid-cols-1 items-center gap-x-8 gap-y-16 px-4 py-24 sm:px-6 sm:py-32 lg:max-w-7xl lg:grid-cols-2 lg:px-8">
-          <div className="grid grid-cols-2 grid-rows-2 gap-4 sm:gap-6 lg:gap-8">
-            <img
-              src="https://tailwindui.com/img/ecommerce-images/product-feature-03-detail-01.jpg"
-              alt="Walnut card tray with white powder coated steel divider and 3 punchout holes."
-              className="rounded-lg bg-gray-100"
-            />
-            <img
-              src="https://tailwindui.com/img/ecommerce-images/product-feature-03-detail-02.jpg"
-              alt="Top down view of walnut card tray with embedded magnets and card groove."
-              className="rounded-lg bg-gray-100"
-            />
-            <img
-              src="https://tailwindui.com/img/ecommerce-images/product-feature-03-detail-03.jpg"
-              alt="Side of walnut card tray with card groove and recessed card area."
-              className="rounded-lg bg-gray-100"
-            />
-            <img
-              src="https://tailwindui.com/img/ecommerce-images/product-feature-03-detail-04.jpg"
-              alt="Walnut card tray filled with cards and card angled in dedicated groove."
-              className="rounded-lg bg-gray-100"
-            />
-          </div>
+          {data.images[3]?.url && (
+            <div className="grid grid-cols-2 grid-rows-2 gap-4 sm:gap-6 lg:gap-8">
+              {data.images[3]?.url && (
+                <Image
+                  width={1024}
+                  height={1024}
+                  src={data.images[3]?.url}
+                  alt="Walnut card tray with white powder coated steel divider and 3 punchout holes."
+                  className="rounded-lg bg-gray-100"
+                />
+              )}
+              {data.images[4]?.url && (
+                <Image
+                  width={1024}
+                  height={1024}
+                  src={data.images[4]?.url}
+                  alt="Top down view of walnut card tray with embedded magnets and card groove."
+                  className="rounded-lg bg-gray-100"
+                />
+              )}
+
+              {data.images[5]?.url && (
+                <Image
+                  width={1024}
+                  height={1024}
+                  src={data.images[5]?.url}
+                  alt="Side of walnut card tray with card groove and recessed card area."
+                  className="rounded-lg bg-gray-100"
+                />
+              )}
+
+              {data.images[6]?.url && (
+                <Image
+                  width={1024}
+                  height={1024}
+                  src={data.images[6]?.url}
+                  alt="Walnut card tray filled with cards and card angled in dedicated groove."
+                  className="rounded-lg bg-gray-100"
+                />
+              )}
+            </div>
+          )}
           <div>
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Technical Specifications

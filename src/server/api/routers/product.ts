@@ -36,6 +36,19 @@ export const productRouter = createTRPCRouter({
       });
     }),
 
+  setPublished: protectedProcedure
+    .input(z.object({ id: z.string(), isPublished: z.boolean() }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.prisma.product.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          isPublished: input.isPublished,
+        },
+      });
+    }),
+
   addProduct: protectedProcedure
     .input(
       z.object({
@@ -153,6 +166,16 @@ export const productRouter = createTRPCRouter({
               },
             })),
           },
+        },
+      });
+    }),
+
+  deleteProduct: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.product.delete({
+        where: {
+          id: input.id,
         },
       });
     }),
