@@ -39,7 +39,7 @@ export const productRouter = createTRPCRouter({
   setPublished: protectedProcedure
     .input(z.object({ id: z.string(), isPublished: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
-      return ctx.prisma.product.update({
+      const res = await ctx.prisma.product.update({
         where: {
           id: input.id,
         },
@@ -47,6 +47,16 @@ export const productRouter = createTRPCRouter({
           isPublished: input.isPublished,
         },
       });
+
+      await ctx.prisma.activityLog.create({
+        data: {
+          type: "PRODUCT_PUBLISH_SET",
+          desc: `Product ${res.name} published status set to ${input.isPublished}`,
+          userId: ctx.session?.user?.id,
+        },
+      });
+
+      return res;
     }),
 
   addProduct: protectedProcedure
@@ -76,8 +86,8 @@ export const productRouter = createTRPCRouter({
         ),
       })
     )
-    .mutation(({ ctx, input }) => {
-      return ctx.prisma.product.create({
+    .mutation(async ({ ctx, input }) => {
+      const res = await ctx.prisma.product.create({
         data: {
           name: input.name,
           slug: input.slug,
@@ -94,6 +104,16 @@ export const productRouter = createTRPCRouter({
           },
         },
       });
+
+      await ctx.prisma.activityLog.create({
+        data: {
+          type: "PRODUCT_ADDED",
+          desc: `Product ${input.name} added`,
+          userId: ctx.session?.user?.id,
+        },
+      });
+
+      return res;
     }),
 
   updateProduct: protectedProcedure
@@ -124,8 +144,8 @@ export const productRouter = createTRPCRouter({
         ),
       })
     )
-    .mutation(({ ctx, input }) => {
-      return ctx.prisma.product.update({
+    .mutation(async ({ ctx, input }) => {
+      const res = await ctx.prisma.product.update({
         where: {
           id: input.id,
         },
@@ -168,15 +188,35 @@ export const productRouter = createTRPCRouter({
           },
         },
       });
+
+      await ctx.prisma.activityLog.create({
+        data: {
+          type: "PRODUCT_UPDATED",
+          desc: `Product ${res.name} added`,
+          userId: ctx.session?.user?.id,
+        },
+      });
+
+      return res;
     }),
 
   deleteProduct: protectedProcedure
     .input(z.object({ id: z.string() }))
-    .mutation(({ ctx, input }) => {
-      return ctx.prisma.product.delete({
+    .mutation(async ({ ctx, input }) => {
+      const res = await ctx.prisma.product.delete({
         where: {
           id: input.id,
         },
       });
+
+      await ctx.prisma.activityLog.create({
+        data: {
+          type: "PRODUCT_DELETED",
+          desc: `Product ${res.name} deleted`,
+          userId: ctx.session?.user?.id,
+        },
+      });
+
+      return res;
     }),
 });

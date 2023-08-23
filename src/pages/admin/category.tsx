@@ -39,7 +39,7 @@ import { z } from "zod";
 import { SectionIntro } from "~/components/shared/SectionIntro";
 import ConfirmationModal from "~/components/ui/ConfirmationModal";
 import { api } from "~/utils/api";
-import { UploadButton, UploadDropzone } from "~/utils/uploadthing";
+import { UploadDropzone } from "~/utils/uploadthing";
 
 const columns = [
   { name: "Name", uid: "name" },

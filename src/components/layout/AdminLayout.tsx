@@ -3,13 +3,13 @@ import { Dialog, Transition } from "@headlessui/react";
 import {
   AiOutlineBars,
   AiOutlineCalendar,
-  AiOutlineFolder,
   AiOutlineHome,
-  AiOutlineInbox,
   AiOutlineUser,
   AiOutlineClose,
   AiOutlineBarChart,
 } from "react-icons/ai";
+import { BiCategory } from "react-icons/bi";
+import { RxActivityLog } from "react-icons/rx";
 import clsx from "clsx";
 import { Logo } from "../Logo";
 import Link from "next/link";
@@ -20,12 +20,12 @@ import { useRouter } from "next/router";
 import { Button } from "@nextui-org/react";
 
 const navigation = [
+  { name: "Overview", href: "/admin", icon: AiOutlineBarChart },
   { name: "Products", href: "/admin/products", icon: AiOutlineHome },
+  { name: "Category", href: "/admin/category", icon: BiCategory },
   { name: "Team", href: "/admin/team", icon: AiOutlineUser },
-  { name: "Category", href: "/admin/category", icon: AiOutlineFolder },
-  { name: "Calendar", href: "#", icon: AiOutlineCalendar },
-  { name: "Documents", href: "#", icon: AiOutlineInbox },
-  { name: "Reports", href: "#", icon: AiOutlineBarChart },
+  { name: "Newsletter", href: "/admin/newsletter", icon: AiOutlineCalendar },
+  { name: "Activity Log", href: "/admin/activity", icon: RxActivityLog },
 ];
 
 interface AdminLayoutProps {

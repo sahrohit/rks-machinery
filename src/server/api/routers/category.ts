@@ -14,7 +14,7 @@ export const categoryRouter = createTRPCRouter({
     return ctx.prisma.category.findMany();
   }),
 
-  getCategoryWithProduct: protectedProcedure.query(({ ctx }) => {
+  getCategoryWithProduct: protectedProcedure.query(async ({ ctx }) => {
     return ctx.prisma.category.findMany({
       include: {
         products: true,
@@ -41,7 +41,14 @@ export const categoryRouter = createTRPCRouter({
         image: z.string().nullable(),
       })
     )
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.activityLog.create({
+        data: {
+          type: "CATEGORY_ADDED",
+          desc: `Category ${input.name} added`,
+          userId: ctx.session?.user?.id,
+        },
+      });
       return ctx.prisma.category.create({
         data: {
           name: input.name,
@@ -61,7 +68,14 @@ export const categoryRouter = createTRPCRouter({
         image: z.string().nullable(),
       })
     )
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.activityLog.create({
+        data: {
+          type: "CATEGORY_UPDATED",
+          desc: `Category ${input.name} updated`,
+          userId: ctx.session?.user?.id,
+        },
+      });
       return ctx.prisma.category.update({
         where: {
           id: input.id,
@@ -76,11 +90,19 @@ export const categoryRouter = createTRPCRouter({
 
   deleteCategory: protectedProcedure
     .input(z.object({ id: z.string() }))
-    .mutation(({ ctx, input }) => {
-      return ctx.prisma.category.delete({
+    .mutation(async ({ ctx, input }) => {
+      const res = await ctx.prisma.category.delete({
         where: {
           id: input.id,
         },
       });
+      await ctx.prisma.activityLog.create({
+        data: {
+          type: "CATEGORY_DELETED",
+          desc: `Category ${res.name} deleted`,
+          userId: ctx.session?.user?.id,
+        },
+      });
+      return res;
     }),
 });
