@@ -18,8 +18,8 @@ import {
   Tooltip,
   Button,
 } from "@nextui-org/react";
-import React, { useEffect } from "react";
-import { AiOutlineDelete, AiOutlinePullRequest } from "react-icons/ai";
+import React from "react";
+import { AiOutlineDelete, AiOutlinePushpin } from "react-icons/ai";
 import ConfirmationModal from "~/components/ui/ConfirmationModal";
 import { api } from "~/utils/api";
 import { TbExternalLink } from "react-icons/tb";
@@ -130,7 +130,7 @@ const ProductTable = () => {
                   });
                 }}
               >
-                <AiOutlinePullRequest />
+                <AiOutlinePushpin />
               </ConfirmationModal>
               <ConfirmationModal
                 size="sm"
@@ -198,14 +198,16 @@ const ProductTableSkeleton = () => {
   return (
     <Table aria-label="Example table with custom cells">
       <TableHeader>
-        <TableColumn align="start">Email</TableColumn>
-        <TableColumn align="start">ACCESS</TableColumn>
+        <TableColumn align="start">Name</TableColumn>
+        <TableColumn align="start">IsPublished</TableColumn>
+        <TableColumn align="start">Category</TableColumn>
+        <TableColumn align="start">Price</TableColumn>
         <TableColumn align="center">ACTIONS</TableColumn>
       </TableHeader>
       <TableBody>
-        {[1, 2, 3].map((row) => (
+        {[1, 2, 3, 4, 5].map((row) => (
           <TableRow key={`mock-cell-${row}`}>
-            {[1, 2, 3].map((col) => (
+            {[1, 2, 3, 4, 5].map((col) => (
               <TableCell key={`mock-cell-${col}`}>
                 <Skeleton className="w-3/5 rounded-lg">
                   <div className="h-10 w-3/5 rounded-lg bg-default-200"></div>

@@ -14,6 +14,7 @@ import { type ReactNode } from "react";
 interface ConfirmationModalProps extends ButtonProps {
   header: ReactNode;
   body: ReactNode;
+  confirmButtonProps?: ButtonProps;
   onConfirm: () => void;
 }
 
@@ -21,6 +22,7 @@ const ConfirmationModal = ({
   header,
   body,
   onConfirm,
+  confirmButtonProps,
   ...props
 }: ConfirmationModalProps) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -44,6 +46,7 @@ const ConfirmationModal = ({
                 </Button>
                 <Button
                   color="danger"
+                  {...confirmButtonProps}
                   onClick={() => {
                     onConfirm();
                     onClose();

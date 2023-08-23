@@ -22,7 +22,7 @@ import { Button } from "@nextui-org/react";
 const navigation = [
   { name: "Products", href: "/admin/products", icon: AiOutlineHome },
   { name: "Team", href: "/admin/team", icon: AiOutlineUser },
-  { name: "Projects", href: "#", icon: AiOutlineFolder },
+  { name: "Category", href: "/admin/category", icon: AiOutlineFolder },
   { name: "Calendar", href: "#", icon: AiOutlineCalendar },
   { name: "Documents", href: "#", icon: AiOutlineInbox },
   { name: "Reports", href: "#", icon: AiOutlineBarChart },

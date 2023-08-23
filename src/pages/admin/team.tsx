@@ -66,21 +66,29 @@ const TeamTable = () => {
 
   const { mutate } = api.admin.deleteAdminById.useMutation({
     onSuccess: () => {
-      toast.success("Admin deleted successfully");
+      toast.success("Admin deleted successfully", {
+        id: "update-access",
+      });
       void utils.admin.getAdmins.invalidate();
     },
     onError: (error) => {
-      toast.error(error.message);
+      toast.error(error.message, {
+        id: "update-access",
+      });
     },
   });
 
   const { mutate: mutateAccess } = api.admin.updateAccessById.useMutation({
     onSuccess: () => {
-      toast.success("Admin access updated successfully");
+      toast.success("Admin access updated successfully", {
+        id: "update-access",
+      });
       void utils.admin.getAdmins.invalidate();
     },
     onError: (error) => {
-      toast.error(error.message);
+      toast.error(error.message, {
+        id: "update-access",
+      });
     },
   });
 
@@ -121,6 +129,9 @@ const TeamTable = () => {
                 header={user.access ? "Revoke Access" : "Grant Access"}
                 body="Are you sure you want to update access for this user?"
                 onConfirm={() => {
+                  toast.loading("Updating access", {
+                    id: "update-access",
+                  });
                   mutateAccess({
                     id: user.id,
                     access: !user.access,
@@ -136,6 +147,9 @@ const TeamTable = () => {
                 header="Delete User"
                 body="Are you sure you want to delete this user?"
                 onConfirm={() => {
+                  toast.loading("Updating access", {
+                    id: "update-access",
+                  });
                   mutate({
                     id: user.id,
                   });
@@ -264,7 +278,7 @@ const AddNewTeam = () => {
                     <AiOutlineMail className="pointer-events-none flex-shrink-0 text-2xl text-default-400" />
                   }
                   label="Email"
-                  placeholder="Enter your email"
+                  placeholder="Enter user's google associated email"
                   variant="bordered"
                 />
               </ModalBody>

@@ -23,10 +23,12 @@ import {
 import { z } from "zod";
 import { TbCurrencyRupeeNepalese } from "react-icons/tb";
 import { api } from "~/utils/api";
-import FileUploader from "~/components/ui/FileUploader";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
 import { Fragment } from "react";
+import { UploadDropzone } from "~/utils/uploadthing";
+import Link from "next/link";
+import { CategoryForm } from "~/pages/admin/category";
 
 interface IFeature {
   title: string;
@@ -201,10 +203,14 @@ const ProductForm = ({ product }: ProductFormProps) => {
 
   return (
     <>
-      <Button onPress={onOpen} color="primary">
+      <Button
+        isIconOnly={product ? true : false}
+        variant={product ? "light" : "solid"}
+        onPress={onOpen}
+        color="primary"
+      >
         {product ? <AiOutlineEdit /> : <AiOutlinePlus />}
-        {product ? "Edit" : "Add New"}
-        Product
+        {product ? "" : "Add New Product"}
       </Button>
       <Modal
         size="4xl"
@@ -298,26 +304,6 @@ const ProductForm = ({ product }: ProductFormProps) => {
                       ))}
                     </Select>
                   )}
-                  {/* <AutoComplete
-                    options={
-                      data?.map((category: Category) => ({
-                        name: category.name,
-                        id: category.id,
-                      })) ?? []
-                    }
-                    setValue={setValue}
-                    description={
-                      errors.categoryId?.message ? (
-                        <div className="text-tiny text-danger">
-                          {errors.categoryId?.message}
-                        </div>
-                      ) : (
-                        <div className="text-tiny text-foreground-400">
-                          Select a product Category
-                        </div>
-                      )
-                    }
-                  /> */}
                 </div>
                 <Textarea
                   {...register("desc")}
@@ -345,23 +331,12 @@ const ProductForm = ({ product }: ProductFormProps) => {
                         variant="bordered"
                         defaultValue={product?.features[index]?.title}
                       />
-                      {/* <Input
-                      key={`description-${field.id}`}
-                      {...register(`features.${index}.description`)}
-                      label={`Description ${index + 1}`}
-                      description={`Feature Description ${index + 1}`}
-                      errorMessage={
-                        errors.features?.[index]?.description?.message
-                      }
-                      color={errors.features?.[index] ? "danger" : "default"}
-                      variant="bordered"
-                      defaultValue={product?.features[index]?.description}
-                    /> */}
                       {index !== 0 && index !== 1 ? (
                         <Button
                           isIconOnly
                           size="lg"
                           color="danger"
+                          variant="flat"
                           type="button"
                           onClick={() => featureRemove(index)}
                         >
@@ -370,13 +345,6 @@ const ProductForm = ({ product }: ProductFormProps) => {
                       ) : null}
                     </div>
                     <Textarea
-                      // {...register("desc")}
-                      // label="Description"
-                      // description="Description of the product"
-                      // variant="bordered"
-                      // errorMessage={errors.desc?.message}
-                      // color={errors.desc ? "danger" : "default"}
-                      // defaultValue={product?.desc}
                       key={`description-${field.id}`}
                       {...register(`features.${index}.description`)}
                       label={`Description ${index + 1}`}
@@ -394,6 +362,7 @@ const ProductForm = ({ product }: ProductFormProps) => {
                   <Button
                     color="success"
                     type="button"
+                    variant="flat"
                     onClick={() =>
                       featuresAppend({ title: "", description: "" })
                     }
@@ -442,6 +411,7 @@ const ProductForm = ({ product }: ProductFormProps) => {
                         isIconOnly
                         size="lg"
                         color="danger"
+                        variant="flat"
                         type="button"
                         onClick={() => specificationsRemove(index)}
                       >
@@ -454,6 +424,7 @@ const ProductForm = ({ product }: ProductFormProps) => {
                   <Button
                     color="success"
                     type="button"
+                    variant="flat"
                     onClick={() =>
                       specificationsAppend({ title: "", description: "" })
                     }
@@ -489,8 +460,23 @@ const ProductForm = ({ product }: ProductFormProps) => {
                     </div>
                   ))}
                 </div>
-
-                <FileUploader append={imagesAppend} />
+                <UploadDropzone
+                  appearance={{
+                    container: {},
+                  }}
+                  endpoint="imageUploader"
+                  onClientUploadComplete={(res) => {
+                    res?.forEach((file) => {
+                      imagesAppend({
+                        url: file.url,
+                      });
+                    });
+                    toast.success(`Files upload successfully`);
+                  }}
+                  onUploadError={(error: Error) => {
+                    toast.error(`ERROR! ${error.message}`);
+                  }}
+                />
               </ModalBody>
               <ModalFooter
                 className={`${
