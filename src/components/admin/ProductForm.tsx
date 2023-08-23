@@ -26,6 +26,7 @@ import { api } from "~/utils/api";
 import FileUploader from "~/components/ui/FileUploader";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
+import { Fragment } from "react";
 
 interface IFeature {
   title: string;
@@ -44,6 +45,7 @@ export interface IProduct {
   categoryId: string;
   features: IFeature[];
   images: IImages[];
+  specifications: IFeature[];
   isPublished: boolean;
 }
 
@@ -54,6 +56,14 @@ const ProductSchema = z.object({
   price: z.number(),
   categoryId: z.string(),
   features: z.array(
+    z.object({
+      title: z.string().min(3, "Title must be at least 3 characters long"),
+      description: z
+        .string()
+        .min(3, "Description must be at least 3 characters long"),
+    })
+  ),
+  specifications: z.array(
     z.object({
       title: z.string().min(3, "Title must be at least 3 characters long"),
       description: z
@@ -89,6 +99,16 @@ const emptyProductForm = {
       description: "",
     },
   ],
+  specifications: [
+    {
+      title: "",
+      description: "",
+    },
+    {
+      title: "",
+      description: "",
+    },
+  ],
   images: [],
   isPublished: false,
 };
@@ -105,6 +125,7 @@ const ProductForm = ({ product }: ProductFormProps) => {
     defaultValues: product
       ? {
           ...product,
+          categoryId: product.categoryId,
           images: product.images.map((image) => ({
             url: image.url,
           })),
@@ -123,6 +144,15 @@ const ProductForm = ({ product }: ProductFormProps) => {
   });
 
   const {
+    fields: specificationsFields,
+    append: specificationsAppend,
+    remove: specificationsRemove,
+  } = useFieldArray({
+    control,
+    name: "specifications",
+  });
+
+  const {
     fields: imagesFields,
     append: imagesAppend,
     remove: imagesRemove,
@@ -131,21 +161,25 @@ const ProductForm = ({ product }: ProductFormProps) => {
     name: "images",
   });
 
+  const utils = api.useContext();
+
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const { data } = api.category.getCategory.useQuery();
 
   const { mutate: mutateCreate } = api.product.addProduct.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Product created successfully", {
         id: "saving-product",
       });
       onClose();
+      await utils.product.getProducts.invalidate();
     },
-    onError: (error) => {
+    onError: async (error) => {
       toast.error(error.message, {
         id: "saving-product",
       });
+      await utils.product.getProducts.invalidate();
     },
   });
 
@@ -163,7 +197,7 @@ const ProductForm = ({ product }: ProductFormProps) => {
     },
   });
 
-  console.log(errors);
+  console.log(data);
 
   return (
     <>
@@ -243,28 +277,27 @@ const ProductForm = ({ product }: ProductFormProps) => {
                     variant="bordered"
                     defaultValue={product?.price}
                   />
-                  <Select
-                    {...register("categoryId")}
-                    label="Category"
-                    description="Category the product belongs to"
-                    errorMessage={errors.categoryId?.message}
-                    color={errors.categoryId ? "danger" : "default"}
-                    variant="bordered"
-                    // defaultValue={product?.categoryId}
-                    defaultSelectedKeys={product?.categoryId}
-                  >
-                    {!data ? (
-                      <SelectItem key="" value="">
-                        Loading...
-                      </SelectItem>
-                    ) : (
-                      data.map((category) => (
+                  {data && (
+                    <Select
+                      {...register("categoryId")}
+                      items={data.map((category) => ({
+                        label: category.name,
+                        value: category.id,
+                      }))}
+                      label="Category"
+                      description="Category the product belongs to"
+                      errorMessage={errors.categoryId?.message}
+                      color={errors.categoryId ? "danger" : "default"}
+                      variant="bordered"
+                      defaultSelectedKeys={[product?.categoryId ?? ""]}
+                    >
+                      {data.map((category) => (
                         <SelectItem key={category.id} value={category.id}>
                           {category.name}
                         </SelectItem>
-                      ))
-                    )}
-                  </Select>
+                      ))}
+                    </Select>
+                  )}
                   {/* <AutoComplete
                     options={
                       data?.map((category: Category) => ({
@@ -297,21 +330,53 @@ const ProductForm = ({ product }: ProductFormProps) => {
                 />
                 <h2 className="text-2xl">Feature of the Product</h2>
                 {featuresFields.map((field, index) => (
-                  <div
-                    key={`feature-array-${index + 1}`}
-                    className="flex w-full flex-col justify-between gap-4 md:flex-row"
-                  >
-                    <Input
-                      key={`title-${field.id}`}
-                      {...register(`features.${index}.title`)}
-                      label={`Title ${index + 1}`}
-                      description={`Feature Title ${index + 1}`}
-                      errorMessage={errors.features?.[index]?.title?.message}
+                  <Fragment key={`feature-array-${index + 1}`}>
+                    <div
+                      // key={`feature-array-${index + 1}`}
+                      className="flex w-full flex-col justify-between gap-4 md:flex-row"
+                    >
+                      <Input
+                        key={`title-${field.id}`}
+                        {...register(`features.${index}.title`)}
+                        label={`Title ${index + 1}`}
+                        description={`Feature Title ${index + 1}`}
+                        errorMessage={errors.features?.[index]?.title?.message}
+                        color={errors.features?.[index] ? "danger" : "default"}
+                        variant="bordered"
+                        defaultValue={product?.features[index]?.title}
+                      />
+                      {/* <Input
+                      key={`description-${field.id}`}
+                      {...register(`features.${index}.description`)}
+                      label={`Description ${index + 1}`}
+                      description={`Feature Description ${index + 1}`}
+                      errorMessage={
+                        errors.features?.[index]?.description?.message
+                      }
                       color={errors.features?.[index] ? "danger" : "default"}
                       variant="bordered"
-                      defaultValue={product?.features[index]?.title}
-                    />
-                    <Input
+                      defaultValue={product?.features[index]?.description}
+                    /> */}
+                      {index !== 0 && index !== 1 ? (
+                        <Button
+                          isIconOnly
+                          size="lg"
+                          color="danger"
+                          type="button"
+                          onClick={() => featureRemove(index)}
+                        >
+                          <AiOutlineClose />
+                        </Button>
+                      ) : null}
+                    </div>
+                    <Textarea
+                      // {...register("desc")}
+                      // label="Description"
+                      // description="Description of the product"
+                      // variant="bordered"
+                      // errorMessage={errors.desc?.message}
+                      // color={errors.desc ? "danger" : "default"}
+                      // defaultValue={product?.desc}
                       key={`description-${field.id}`}
                       {...register(`features.${index}.description`)}
                       label={`Description ${index + 1}`}
@@ -323,18 +388,7 @@ const ProductForm = ({ product }: ProductFormProps) => {
                       variant="bordered"
                       defaultValue={product?.features[index]?.description}
                     />
-                    {index !== 0 && index !== 1 ? (
-                      <Button
-                        isIconOnly
-                        size="lg"
-                        color="danger"
-                        type="button"
-                        onClick={() => featureRemove(index)}
-                      >
-                        <AiOutlineClose />
-                      </Button>
-                    ) : null}
-                  </div>
+                  </Fragment>
                 ))}
                 <div>
                   <Button
@@ -347,7 +401,72 @@ const ProductForm = ({ product }: ProductFormProps) => {
                     Add New Feature
                   </Button>
                 </div>
-                <h2 className="text-2xl">Images of the product</h2>
+                <h2 className="text-2xl">
+                  Technical Specification of the Product
+                </h2>
+                {specificationsFields.map((field, index) => (
+                  <div
+                    key={`specification-array-${index + 1}`}
+                    className="flex w-full flex-col justify-between gap-4 md:flex-row"
+                  >
+                    <Input
+                      key={`title-${field.id}`}
+                      {...register(`specifications.${index}.title`)}
+                      label={`Title ${index + 1}`}
+                      description={`Specification Title ${index + 1}`}
+                      errorMessage={
+                        errors.specifications?.[index]?.title?.message
+                      }
+                      color={
+                        errors.specifications?.[index] ? "danger" : "default"
+                      }
+                      variant="bordered"
+                      defaultValue={product?.specifications[index]?.title}
+                    />
+                    <Input
+                      key={`description-${field.id}`}
+                      {...register(`specifications.${index}.description`)}
+                      label={`Description ${index + 1}`}
+                      description={`Specification Description ${index + 1}`}
+                      errorMessage={
+                        errors.specifications?.[index]?.description?.message
+                      }
+                      color={
+                        errors.specifications?.[index] ? "danger" : "default"
+                      }
+                      variant="bordered"
+                      defaultValue={product?.specifications[index]?.description}
+                    />
+                    {index !== 0 && index !== 1 ? (
+                      <Button
+                        isIconOnly
+                        size="lg"
+                        color="danger"
+                        type="button"
+                        onClick={() => specificationsRemove(index)}
+                      >
+                        <AiOutlineClose />
+                      </Button>
+                    ) : null}
+                  </div>
+                ))}
+                <div>
+                  <Button
+                    color="success"
+                    type="button"
+                    onClick={() =>
+                      specificationsAppend({ title: "", description: "" })
+                    }
+                  >
+                    Add New Feature
+                  </Button>
+                </div>
+                <h2 className="text-2xl">
+                  Images of the product{" "}
+                  <span className="text-sm">
+                    (7 images is recommended [{7 - imagesFields.length} more])
+                  </span>
+                </h2>
                 <div className="flex w-full flex-row flex-wrap gap-4">
                   {imagesFields.map((field, index) => (
                     <div key={field.url}>
@@ -370,6 +489,7 @@ const ProductForm = ({ product }: ProductFormProps) => {
                     </div>
                   ))}
                 </div>
+
                 <FileUploader append={imagesAppend} />
               </ModalBody>
               <ModalFooter
