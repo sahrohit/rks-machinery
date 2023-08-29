@@ -2,13 +2,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import { Container } from "~/components/layout/Container";
 import { FadeIn } from "~/components/layout/FadeIn";
 import Clients from "~/components/pages/home/Clients";
-import Services from "~/components/pages/home/Services";
-import { Testimonial } from "~/components/shared/Testimonial";
+// import Services from "~/components/pages/home/Services";
+// import { Testimonial } from "~/components/shared/Testimonial";
 import logoPhobiaDark from "~/images/clients/phobia/logo-dark.svg";
+
+const Testimonial = dynamic(() => import("~/components/shared/Testimonial"));
+const Services = dynamic(() => import("~/components/pages/home/Services"));
 
 export default function Home() {
   const t = useTranslations("Home");
@@ -30,6 +34,7 @@ export default function Home() {
         </FadeIn>
       </Container>
       <Clients />
+      {/* <Reviews /> */}
       <Testimonial
         className="mt-24 sm:mt-32 lg:mt-40"
         client={{ name: "Phobia", logo: logoPhobiaDark }}

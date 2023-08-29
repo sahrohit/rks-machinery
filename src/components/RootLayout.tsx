@@ -72,11 +72,11 @@ function Header({
         </Link>
         <div className="flex items-center gap-x-8">
           <Button
-            href="/test"
+            href="/products"
             as={NextLink}
             className="bg-neutral-950 text-white hover:bg-neutral-800"
           >
-            {t("contact-us")}
+            {t("products")}
           </Button>
           <LocaleSwitcher />
           <button

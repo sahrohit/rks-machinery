@@ -95,8 +95,8 @@ model Category {
 
 model Product {
     id             String                 @id @default(cuid())
-    name           String?                @unique
-    slug           String?                @unique
+    name           String                 @unique
+    slug           String                 @unique
     price          Float?
     desc           String?
     images         ProductImage[]

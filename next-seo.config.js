@@ -1,6 +1,6 @@
-const title = 'RKSM | Rajesh Sah Machinery';
+const title = 'RKSM | Laboratory Equipment Solution in Nepal';
 const description =
-    'We deal with Engineering Laboratory Equipment. Installation Demonstration And Training.';
+    'We provide a wide range of laboratory equipment and services for schools and colleges in Nepal. Our team of experts can help you choose the right equipment for your needs, and we offer installation, demonstration, and training services to ensure that you get the most out of your investment.';
 const url = 'https://rksm.netlify.app';
 
 const SEO = {
@@ -14,10 +14,8 @@ const SEO = {
         description,
         images: [
             {
-                url: `https://og-image.vercel.app/**Next.js%20Chakra**%20Starter.png?theme=light&md=1&fontSize=125px&images=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fnextjs-black-logo.svg&images=https%3A%2F%2Fraw.githubusercontent.com%2Fchakra-ui%2Fchakra-ui%2Fbf775929a6d73a3aa69e44d5d38542449871475c%2Flogo%2Flogomark-colored.svg`,
+                url: `/splash.webp`,
                 alt: title,
-                width: 2048,
-                height: 1170,
             },
         ],
     },

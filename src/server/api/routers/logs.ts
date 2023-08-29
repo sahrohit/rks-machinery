@@ -6,6 +6,9 @@ export const logsRouter = createTRPCRouter({
       include: {
         user: true,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
   }),
 });

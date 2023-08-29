@@ -5,8 +5,8 @@ import { Fragment, type ReactNode, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { BsChevronExpand } from "react-icons/bs";
 import { AiOutlineCheck } from "react-icons/ai";
-import { type IProduct } from "~/pages/admin/products/cards";
 import { type UseFormSetValue } from "react-hook-form";
+import { type IProduct } from "../admin/ProductForm";
 
 interface AutoCompleteProps {
   options: {

@@ -6,13 +6,19 @@
     "about-us": "About Us",
     "our-offices": "Our offices",
     "follow-us": "Follow Us",
-    "contact-us": "Contact Us"
+    "contact-us": "Contact Us",
+    "home": "Home",
+    "products": "Our Products"
   },
   "Home": {
     "title": "RKS Machinery Pvt Ltd.",
     "landing-heading": "Laboratory Equipment solution based in Nepal.",
     "landing-subheading": "We are working at the intersection of innovation and  education. It's a really busy intersection though — a lot of our staff have been involved in demonstration and training.",
     "client-heading": "We've worked with hundreds of amazing people"
+  },
+  "Products": {
+    "heading": "Products",
+    "sub-heading": "We provide all kinds of laboratory equipment, chemicals, glassware and consumables for schools, colleges, universities and other research centers."
   },
   "Address": {
     "first": {

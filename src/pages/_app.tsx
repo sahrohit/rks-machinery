@@ -18,7 +18,6 @@ import { Work_Sans } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { Toaster } from "react-hot-toast";
 import AdminLayout from "~/components/layout/AdminLayout";
-// import "@uploadthing/react/styles.css";
 
 const workSans = Work_Sans({
   subsets: ["latin"],
@@ -57,24 +56,24 @@ const MyApp: AppType<{ session: Session | null; messages: any }> = ({
           `,
           }}
         />
-        <SessionProvider session={session}>
-          <DefaultSeo {...SEO} />
-          <Toaster />
-          <style jsx global>{`
-            :root {
-              --font-work-sans: ${workSans.style.fontFamily};
-            }
-          `}</style>
-          {router.asPath.includes("admin") ? (
+        <DefaultSeo {...SEO} />
+        <Toaster />
+        <style jsx global>{`
+          :root {
+            --font-work-sans: ${workSans.style.fontFamily};
+          }
+        `}</style>
+        {router.asPath.includes("admin") ? (
+          <SessionProvider session={session}>
             <AdminLayout>
               <Component {...pageProps} />
             </AdminLayout>
-          ) : (
-            <RootLayout>
-              <Component {...pageProps} />
-            </RootLayout>
-          )}
-        </SessionProvider>
+          </SessionProvider>
+        ) : (
+          <RootLayout>
+            <Component {...pageProps} />
+          </RootLayout>
+        )}
       </NextUIProvider>
     </NextIntlClientProvider>
   );

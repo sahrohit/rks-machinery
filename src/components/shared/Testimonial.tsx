@@ -15,7 +15,7 @@ interface TestimonialProps {
   children: ReactNode;
 }
 
-export function Testimonial({ children, client, className }: TestimonialProps) {
+const Testimonial = ({ children, client, className }: TestimonialProps) => {
   return (
     <div
       className={clsx(
@@ -43,4 +43,6 @@ export function Testimonial({ children, client, className }: TestimonialProps) {
       </Container>
     </div>
   );
-}
+};
+
+export default Testimonial;

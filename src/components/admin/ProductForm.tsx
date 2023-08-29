@@ -27,8 +27,6 @@ import Image from "next/image";
 import { toast } from "react-hot-toast";
 import { Fragment } from "react";
 import { UploadDropzone } from "~/utils/uploadthing";
-import Link from "next/link";
-import { CategoryForm } from "~/pages/admin/category";
 
 interface IFeature {
   title: string;

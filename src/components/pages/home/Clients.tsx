@@ -66,7 +66,7 @@ const Clients = () => {
             {CLIENTS.map(({ client, logo }) => (
               <li key={client}>
                 <FadeIn>
-                  <Image src={logo} alt={client} unoptimized />
+                  <Image src={logo} alt={client} loading="lazy" />
                 </FadeIn>
               </li>
             ))}

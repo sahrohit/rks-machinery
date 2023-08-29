@@ -27,9 +27,11 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "**/*.jsx",
     "**/*.cjs",
     "**/*.mjs",
-    "next-seo.config.js"
+    "next-seo.config.js",
+    "src/components/Reviews.tsx"
   ],
   "exclude": ["node_modules"]
 }

@@ -16,6 +16,7 @@ export const productRouter = createTRPCRouter({
         images: true,
         category: true,
         features: true,
+        specifications: true,
       },
     });
     return products;
@@ -32,6 +33,7 @@ export const productRouter = createTRPCRouter({
           images: true,
           category: true,
           features: true,
+          specifications: true,
         },
       });
     }),
@@ -79,6 +81,16 @@ export const productRouter = createTRPCRouter({
               .min(3, "Description must be at least 3 characters long"),
           })
         ),
+        specifications: z.array(
+          z.object({
+            title: z
+              .string()
+              .min(3, "Title must be at least 3 characters long"),
+            description: z
+              .string()
+              .min(3, "Description must be at least 3 characters long"),
+          })
+        ),
         images: z.array(
           z.object({
             url: z.string(),
@@ -96,6 +108,9 @@ export const productRouter = createTRPCRouter({
           categoryId: input.categoryId,
           features: {
             create: input.features,
+          },
+          specifications: {
+            create: input.specifications,
           },
           images: {
             create: input.images.map((image) => ({
@@ -128,6 +143,16 @@ export const productRouter = createTRPCRouter({
         price: z.string(),
         categoryId: z.string(),
         features: z.array(
+          z.object({
+            title: z
+              .string()
+              .min(3, "Title must be at least 3 characters long"),
+            description: z
+              .string()
+              .min(3, "Description must be at least 3 characters long"),
+          })
+        ),
+        specifications: z.array(
           z.object({
             title: z
               .string()
@@ -183,6 +208,24 @@ export const productRouter = createTRPCRouter({
               },
               update: {
                 url: image.url,
+              },
+            })),
+          },
+          specifications: {
+            upsert: input.specifications.map((specification) => ({
+              where: {
+                title_productId: {
+                  title: specification.title,
+                  productId: input.id,
+                },
+              },
+              create: {
+                title: specification.title,
+                description: specification.description,
+              },
+              update: {
+                title: specification.title,
+                description: specification.description,
               },
             })),
           },
